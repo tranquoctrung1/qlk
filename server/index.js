@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 require('express-async-errors');
-const cors = require('./middleware/cors');
+const cors = require('./middlewares/cors');
 
 const app = express();
 
