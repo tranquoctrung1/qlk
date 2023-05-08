@@ -15,6 +15,7 @@ specifiers:
   framer-motion: ^10.11.6
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-hook-form: ^7.43.9
   react-redux: ^8.0.5
   react-router-dom: ^6.10.0
   sweetalert2: ^11.7.3
@@ -33,6 +34,7 @@ dependencies:
   framer-motion: 10.11.6_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.43.9_react@18.2.0
   react-redux: 8.0.5_jlpdlnmgz6kfq77dq7ypembf5a
   react-router-dom: 6.10.0_biqbaboplfbrettd7655fr4n2y
   sweetalert2: 11.7.3
@@ -1334,6 +1336,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.43.9_react@18.2.0:
+    resolution: {integrity: sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:

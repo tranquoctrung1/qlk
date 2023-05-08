@@ -6,6 +6,10 @@ const http = require('http');
 require('express-async-errors');
 const cors = require('./middlewares/cors');
 
+const StockRouter = require('./routers/stock.router');
+const FloorRouter = require('./routers/floor.router');
+const ProductRouter = require('./routers/product.router');
+
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -18,6 +22,10 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 
 // use cors
 app.use(cors);
+
+app.use('/api', StockRouter);
+app.use('/api', FloorRouter);
+app.use('/api', ProductRouter);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });
