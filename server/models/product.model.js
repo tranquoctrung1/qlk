@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const ConnectDB = require('../db/connect');
 
 const ProductCollection = 'products';
@@ -68,6 +69,49 @@ module.exports.Insert = async (product) => {
         Connect.disconnect();
 
         return result;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+module.exports.Update = async (product) => {
+    try {
+        let Connect = new ConnectDB.Connect();
+
+        let collection = await Connect.connect(ProductCollection);
+
+        let result = await collection.updateMany(
+            {
+                _id: new ObjectId(product.id),
+            },
+            {
+                $set: {
+                    Name: product.Name,
+                    ProductID: product.ProductID,
+                    ImportDate: product.ImportDate,
+                    Unit: product.Unit,
+                    BaseAlarm: product.BaseAlarm,
+                },
+            },
+        );
+
+        Connect.disconnect();
+
+        return result.modifiedCount;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+module.exports.Delete = async (id) => {
+    try {
+        let Connect = new ConnectDB.Connect();
+
+        let collection = await Connect.connect(ProductCollection);
+
+        let result = await collection.deleteMany({ _id: new ObjectId(id) });
+
+        return result.deletedCount;
     } catch (err) {
         console.log(err);
     }

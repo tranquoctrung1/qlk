@@ -22,3 +22,27 @@ module.exports.GetProducts = async (req, res) => {
         res.status(500).json(err);
     }
 };
+
+module.exports.Update = async (req, res) => {
+    try {
+        let product = req.body;
+
+        let result = await ProductModel.Update(product);
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ err: err });
+    }
+};
+
+module.exports.Delete = async (req, res) => {
+    try {
+        let { id } = req.query;
+
+        let result = await ProductModel.Delete(id);
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
