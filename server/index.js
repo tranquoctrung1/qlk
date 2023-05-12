@@ -9,6 +9,7 @@ const cors = require('./middlewares/cors');
 const StockRouter = require('./routers/stock.router');
 const FloorRouter = require('./routers/floor.router');
 const ProductRouter = require('./routers/product.router');
+const ListProductRouter = require('./routers/listProduct.router');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(cors);
 app.use('/api', StockRouter);
 app.use('/api', FloorRouter);
 app.use('/api', ProductRouter);
+app.use('/api', ListProductRouter);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });

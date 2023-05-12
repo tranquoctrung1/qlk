@@ -1,45 +1,39 @@
 const { ObjectId } = require('mongodb');
 const ConnectDB = require('../db/connect');
 
-const ProductCollection = 'products';
+const ListProductCollection = 'listproduct';
 
-module.exports.Product = class Product {
-    constructor(_id, ProductID, Name, ImportDate, Unit, BaseAlarm) {
+module.exports.ListProduct = class ListProduct {
+    constructor(
+        _id,
+        IdProduct,
+        ProductId,
+        ProductName,
+        FloorId,
+        FloorName,
+        Amount,
+        ImportDate,
+        Unit,
+    ) {
         this._id = _id;
-        this.Name = Name;
-        this.ProductID = ProductID;
+        this.IdProduct = IdProduct;
+        this.ProductId = ProductId;
+        this.ProductName = ProductName;
+        this.FloorId = FloorId;
+        this.FloorName = FloorName;
+        this.Amount = Amount;
         this.ImportDate = ImportDate;
         this.Unit = Unit;
-        this.BaseAlarm = BaseAlarm;
     }
 };
 
-module.exports.GetProducts = async () => {
+module.exports.GetListProductByFloorId = async (id) => {
     try {
         let Connect = new ConnectDB.Connect();
 
-        let collection = await Connect.connect(ProductCollection);
+        let collection = await Connect.connect(ListProductCollection);
 
-        let result = await collection.find().sort({ Name: 1 }).toArray();
-
-        Connect.disconnect();
-
-        return result;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-module.exports.GetProductByProductId = async (id) => {
-    try {
-        let Connect = new ConnectDB.Connect();
-
-        let collection = await Connect.connect(ProductCollection);
-
-        let result = await collection
-            .find({ ProductID: id })
-            .sort({ Name: 1 })
-            .toArray();
+        let result = await collection.find({ FloorId: id }).toArray();
 
         Connect.disconnect();
 
@@ -55,10 +49,10 @@ module.exports.Insert = async (product) => {
 
         let Connect = new ConnectDB.Connect();
 
-        let collection = await Connect.connect(ProductCollection);
+        let collection = await Connect.connect(ListProductCollection);
 
         let check = await collection
-            .find({ ProductID: product.ProductID })
+            .find({ IdProduct: product.IdProduct, FloorId: product.FloorId })
             .toArray();
 
         if (check.length <= 0) {
@@ -78,7 +72,7 @@ module.exports.Update = async (product) => {
     try {
         let Connect = new ConnectDB.Connect();
 
-        let collection = await Connect.connect(ProductCollection);
+        let collection = await Connect.connect(ListProductCollection);
 
         let result = await collection.updateMany(
             {
@@ -86,11 +80,11 @@ module.exports.Update = async (product) => {
             },
             {
                 $set: {
-                    Name: product.Name,
-                    ProductID: product.ProductID,
+                    ProductId: product.ProductId,
+                    ProductName: product.ProductName,
                     ImportDate: product.ImportDate,
                     Unit: product.Unit,
-                    BaseAlarm: product.BaseAlarm,
+                    Amount: product.Amount,
                 },
             },
         );
@@ -107,7 +101,7 @@ module.exports.Delete = async (id) => {
     try {
         let Connect = new ConnectDB.Connect();
 
-        let collection = await Connect.connect(ProductCollection);
+        let collection = await Connect.connect(ListProductCollection);
 
         let result = await collection.deleteMany({ _id: new ObjectId(id) });
 

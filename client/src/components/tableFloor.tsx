@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FloorState } from '../features/floor';
 
-import { ActionIcon, Modal, Table } from '@mantine/core';
+import { ActionIcon, Modal, Space, Table } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
@@ -9,6 +9,8 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 
 import Product from './product';
+import ProductInFloor from './productInFloor';
+
 const TableFloor = () => {
     const [id, setId] = useState('');
     const [name, setName] = useState('');
@@ -73,12 +75,16 @@ const TableFloor = () => {
             <Modal
                 opened={opened}
                 onClose={close}
-                title="Authentication"
+                title="Sản phẩm"
                 centered
                 size="70%"
                 fullScreen={isMobile}
                 transitionProps={{ transition: 'fade', duration: 200 }}
             >
+                <ProductInFloor name={name} id={id} />
+                <Space h="md" />
+                <hr />
+                <Space h="md" />
                 <Product name={name} id={id} />
             </Modal>
         </>
