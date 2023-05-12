@@ -3,6 +3,7 @@ import CurrentCabinetSlice from './features/currentCabinet';
 import CurrentStockSlice from './features/currentStock';
 import FloorSlice from './features/floor';
 import HostnameSlice from './features/hostname';
+import ListProductSlice from './features/listProduct';
 import OpenSidebarSlice from './features/openSidebar';
 import ProductSlice from './features/products';
 import StockSlice from './features/stock';
@@ -16,6 +17,7 @@ export const store = configureStore({
         currentCabinet: CurrentCabinetSlice,
         floor: FloorSlice,
         products: ProductSlice,
+		listproducts: ListProductSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

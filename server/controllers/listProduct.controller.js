@@ -1,4 +1,5 @@
 const ListProductModel = require('../models/listProducts.model');
+const FloorModel = require('../models/floor.model');
 
 module.exports.GetListProductByFloorId = async (req, res) => {
     try {
@@ -41,6 +42,37 @@ module.exports.DeleteListProduct = async (req, res) => {
         let { id } = req.query;
 
         let result = await ListProductModel.Delete(id);
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+module.exports.GetListProductByCabinetId = async (req, res) => {
+    try {
+        let { id } = req.query;
+
+        let result = [];
+
+        let floors = await FloorModel.GetFloorByCabinetId(id);
+
+        if (floors.length > 0) {
+            for (let floor of floors) {
+                let obj = {};
+                obj.FloorId = floor._id;
+                obj.FloorName = floor.Name;
+
+                let listProducts =
+                    await ListProductModel.GetListProductByFloorId(
+                        floor._id.toString(),
+                    );
+
+                obj.ListProduct = listProducts;
+
+                result.push(obj);
+            }
+        }
 
         res.status(200).json(result);
     } catch (err) {

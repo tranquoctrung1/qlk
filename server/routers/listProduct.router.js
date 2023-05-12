@@ -7,6 +7,12 @@ router.get(
     '/GetListProductByFloorId',
     ListProductController.GetListProductByFloorId,
 );
+
+router.get(
+    '/GetListProductByCabinetId',
+    ListProductController.GetListProductByCabinetId,
+);
+
 router.post('/InsertListProduct', ListProductController.InsertListProduct);
 
 router.patch('/UpdateListProduct', ListProductController.UpdateListProduct);

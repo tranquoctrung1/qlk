@@ -18,6 +18,12 @@ import { useEffect, useState } from 'react';
 import { CurrentCabinetState } from '../features/currentCabinet';
 import { CurrentStockState } from '../features/currentStock';
 import { HostnameState } from '../features/hostname';
+import {
+    ListProductState,
+    addProductToListProduct,
+    deleteProductToListProduct,
+    updateProductToListProduct,
+} from '../features/listProduct';
 import { ProductState } from '../features/products';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,12 +39,14 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
     const currentStock = useSelector(CurrentStockState);
     const currentCabinet = useSelector(CurrentCabinetState);
     const products = useSelector(ProductState);
+    const listProduct = useSelector(ListProductState);
 
-    const [listProduct, setListProduct] = useState([]);
     const [listProductForSlect, setListProductForSlect] = useState([]);
     const [errorProductId, setErrorProductId] = useState('');
     const [errorProductName, setErrorProductName] = useState('');
     const [errorImportDate, setErrorImportDate] = useState('');
+
+    const dispatch = useDispatch();
 
     const getListProductByFloorId = (id: string | undefined) => {
         let url = `${hostname}/GetListProductByFloorId?id=${id}`;
@@ -57,12 +65,6 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                 console.log(err);
             });
     };
-
-    useEffect(() => {
-        if (id !== undefined) {
-            getListProductByFloorId(id);
-        }
-    }, []);
 
     useEffect(() => {
         if (products.length > 0) {
@@ -101,8 +103,14 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
     });
 
     const onProductIDChange = (e: any) => {
+        // @ts-ignore
+        let tempListProduct = listProduct.find((el) => el.FloorId === id);
+
         //@ts-ignore
-        let find = listProduct.find((el) => el.ProductId === e.target.value);
+        let find = tempListProduct.ListProduct.find(
+            //@ts-ignore
+            (el) => el.ProductId === e.target.value,
+        );
 
         if (find !== undefined) {
             setErrorProductId('');
@@ -223,7 +231,7 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                         setValue('_id', res.data);
                         setErrorProductId('');
                         // @ts-ignore
-                        setListProduct([...listProduct, formValue]);
+                        dispatch(addProductToListProduct(formValue));
 
                         Swal.fire({
                             icon: 'success',
@@ -242,19 +250,6 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                 }
             });
         }
-    };
-
-    const updateListProductState = (product: any) => {
-        const newState = listProduct.map((el) => {
-            //@ts-ignore
-            if (el._id === product._id) {
-                return { ...product };
-            }
-            return el;
-        });
-
-        //@ts-ignore
-        setListProduct(newState);
     };
 
     const onUpdateProductInFloorClick = () => {
@@ -299,9 +294,8 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
 
             axios.patch(url, formValue).then((res) => {
                 if (res.status === 200) {
-                    console.log(res.data);
                     if (res.data > 0) {
-                        updateListProductState(formValue);
+                        dispatch(updateProductToListProduct(formValue));
 
                         Swal.fire({
                             icon: 'success',
@@ -320,13 +314,6 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                 }
             });
         }
-    };
-
-    const deleteListProduct = (id: string) => {
-        // @ts-ignore
-        const filter = listProduct.filter((el) => el._id !== id);
-
-        setListProduct(filter);
     };
 
     const onDeleteProductInFloorClick = () => {
@@ -364,7 +351,7 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                         .delete(url)
                         .then((res) => {
                             if (res.status == 200 && res.data > 0) {
-                                deleteListProduct(id);
+                                dispatch(deleteProductToListProduct(formValue));
 
                                 Swal.fire({
                                     icon: 'success',
