@@ -52,6 +52,28 @@ export const ListProductSlice = createSlice({
             }
         },
 
+        updateAmountProductToListProduct: (state, action) => {
+            // @ts-ignore
+            let index = state.value.findIndex(
+                // @ts-ignore
+                (el) => el.FloorId === action.payload.FloorId,
+            );
+
+            if (index >= 0) {
+                // @ts-ignore
+                let tempIndex = state.value[index].ListProduct.findIndex(
+                    //@ts-ignore
+                    (el) => el._id === action.payload.id,
+                );
+
+                if (tempIndex >= 0) {
+                    //@ts-ignore
+                    state.value[index].ListProduct[tempIndex].Amount =
+                        action.payload.amount;
+                }
+            }
+        },
+
         deleteProductToListProduct: (state, action) => {
             // @ts-ignore
             let index = state.value.findIndex(
@@ -78,6 +100,7 @@ export const {
     addProductToListProduct,
     updateProductToListProduct,
     deleteProductToListProduct,
+    updateAmountProductToListProduct,
 } = ListProductSlice.actions;
 
 export const ListProductState = (state: RootState) => state.listproducts.value;

@@ -5,6 +5,7 @@ const ExportHistoryCollection = 'exporthistory';
 module.exports.ExportHistory = class ExportHistory {
     constructor(
         _id,
+        IdProduct,
         ProductId,
         ProductName,
         FloorId,
@@ -18,12 +19,13 @@ module.exports.ExportHistory = class ExportHistory {
         ExportDate,
     ) {
         this._id = _id;
+        this.IdProduct = IdProduct;
         this.ProductId = ProductId;
         this.ProductName = ProductName;
         this.FloorId = FloorId;
         this.FloorName = FloorName;
         this.CabinetId = CabinetId;
-        this.CabinetIdName = CabinetName;
+        this.CabinetName = CabinetName;
         this.StockId = StockId;
         this.StockName = StockName;
         this.Amount = Amount;
@@ -39,6 +41,31 @@ module.exports.GetListExportHistory = async () => {
         let collection = await Connect.connect(ExportHistoryCollection);
 
         let result = await collection.find().sort({ ExportDate: -1 }).toArray();
+
+        Connect.disconnect();
+
+        return result;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+module.exports.Insert = async (history) => {
+    try {
+        let result = '';
+
+        let Connect = new ConnectDB.Connect();
+
+        let collection = await Connect.connect(ExportHistoryCollection);
+
+        let check = await collection
+            .find({ FloorId: history.FloorId, IdProduct: history.IdProduct })
+            .toArray();
+
+        if (check.length <= 0) {
+            result = await collection.insertOne(history);
+            result = result.insertedId;
+        }
 
         Connect.disconnect();
 

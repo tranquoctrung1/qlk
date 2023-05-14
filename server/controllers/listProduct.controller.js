@@ -37,6 +37,18 @@ module.exports.UpdateListProduct = async (req, res) => {
     }
 };
 
+module.exports.UpdateAmountListProduct = async (req, res) => {
+    try {
+        let { id, amount } = req.body;
+
+        let result = await ListProductModel.UpdateAmount(id, amount);
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
 module.exports.DeleteListProduct = async (req, res) => {
     try {
         let { id } = req.query;

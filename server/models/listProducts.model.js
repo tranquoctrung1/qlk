@@ -97,6 +97,41 @@ module.exports.Update = async (product) => {
     }
 };
 
+module.exports.UpdateAmount = async (id, amount) => {
+    try {
+        let Connect = new ConnectDB.Connect();
+
+        let collection = await Connect.connect(ListProductCollection);
+
+        let result;
+
+        if (amount <= 0) {
+            result = await collection.deleteMany({ _id: new ObjectId(id) });
+
+            result = result.deletedCount;
+        } else {
+            result = await collection.updateMany(
+                {
+                    _id: new ObjectId(id),
+                },
+                {
+                    $set: {
+                        Amount: amount,
+                    },
+                },
+            );
+
+            result = result.modifiedCount;
+        }
+
+        Connect.disconnect();
+
+        return result;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 module.exports.Delete = async (id) => {
     try {
         let Connect = new ConnectDB.Connect();

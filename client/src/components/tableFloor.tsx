@@ -4,13 +4,14 @@ import { FloorState } from '../features/floor';
 import { HostnameState } from '../features/hostname';
 import { ListProductState, addListProducts } from '../features/listProduct';
 
-import { ActionIcon, Modal, Space, Table } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { ActionIcon, Center, Modal, Space, Table } from '@mantine/core';
+import { IconPackageExport, IconPlus } from '@tabler/icons-react';
 
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
 import { useEffect, useState } from 'react';
 
+import ExportProduct from './exportProduct';
 import Product from './product';
 import ProductInFloor from './productInFloor';
 
@@ -19,6 +20,12 @@ import axios from 'axios';
 const TableFloor = () => {
     const [id, setId] = useState('');
     const [name, setName] = useState('');
+    const [idProduct, setIdProduct] = useState('');
+    const [productName, setProductName] = useState('');
+    const [productId, setProductId] = useState('');
+    const [unit, setUnit] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [productInFloorId, setProductInFloorId] = useState('');
 
     const currentCabinet = useSelector(CurrentCabinetState);
     const floor = useSelector(FloorState);
@@ -28,6 +35,7 @@ const TableFloor = () => {
     const dispatch = useDispatch();
 
     const [opened, { open, close }] = useDisclosure(false);
+    const [openedExportModal, exportModalHandle] = useDisclosure(false);
     const isMobile = useMediaQuery('(max-width: 50em)');
 
     const getListProductByCabinetId = (id: string) => {
@@ -92,9 +100,9 @@ const TableFloor = () => {
                     for (let product of item.ListProduct) {
                         if (firstRow == true) {
                             content = (
-                                <tr>
+                                <tr key={product._id}>
                                     <td
-                                        rowspan={
+                                        rowSpan={
                                             item.ListProduct.length == 0
                                                 ? 1
                                                 : item.ListProduct.length
@@ -112,18 +120,44 @@ const TableFloor = () => {
                                         )}
                                     </td>
                                     <td>
-                                        <ActionIcon
-                                            variant="filled"
-                                            color="green"
-                                            onClick={() =>
-                                                onAddProductClicked(
-                                                    item.FloorId,
-                                                    item.FloorName,
-                                                )
-                                            }
-                                        >
-                                            <IconPlus size="1.125rem" />
-                                        </ActionIcon>
+                                        <Center>
+                                            <ActionIcon
+                                                variant="filled"
+                                                color="green"
+                                                onClick={() =>
+                                                    onAddProductClicked(
+                                                        item.FloorId,
+                                                        item.FloorName,
+                                                    )
+                                                }
+                                            >
+                                                <IconPlus size="1.125rem" />
+                                            </ActionIcon>
+                                            {product.Amount > 0 &&
+                                            product.Amount !== undefined ? (
+                                                <>
+                                                    <Space w="md" />
+                                                    <ActionIcon
+                                                        variant="filled"
+                                                        color="violet"
+                                                        onClick={() =>
+                                                            onExportClicked(
+                                                                item.FloorId,
+                                                                item.FloorName,
+                                                                product.IdProduct,
+                                                                product.ProductId,
+                                                                product.ProductName,
+                                                                product.Unit,
+                                                                product.Amount,
+                                                                product._id,
+                                                            )
+                                                        }
+                                                    >
+                                                        <IconPackageExport size="1.125rem" />
+                                                    </ActionIcon>
+                                                </>
+                                            ) : null}
+                                        </Center>
                                     </td>
                                 </tr>
                             );
@@ -131,7 +165,7 @@ const TableFloor = () => {
                             firstRow = false;
                         } else {
                             content = (
-                                <tr>
+                                <tr key={product._id}>
                                     <td>{product.ProductId}</td>
                                     <td>{product.ProductName}</td>
                                     <td>{product.Unit}</td>
@@ -142,18 +176,44 @@ const TableFloor = () => {
                                         )}
                                     </td>
                                     <td>
-                                        <ActionIcon
-                                            variant="filled"
-                                            color="green"
-                                            onClick={() =>
-                                                onAddProductClicked(
-                                                    item.FloorId,
-                                                    item.FloorName,
-                                                )
-                                            }
-                                        >
-                                            <IconPlus size="1.125rem" />
-                                        </ActionIcon>
+                                        <Center>
+                                            <ActionIcon
+                                                variant="filled"
+                                                color="green"
+                                                onClick={() =>
+                                                    onAddProductClicked(
+                                                        item.FloorId,
+                                                        item.FloorName,
+                                                    )
+                                                }
+                                            >
+                                                <IconPlus size="1.125rem" />
+                                            </ActionIcon>
+                                            {product.Amount > 0 &&
+                                            product.Amount !== undefined ? (
+                                                <>
+                                                    <Space w="md" />
+                                                    <ActionIcon
+                                                        variant="filled"
+                                                        color="violet"
+                                                        onClick={() =>
+                                                            onExportClicked(
+                                                                item.FloorId,
+                                                                item.FloorName,
+                                                                product.IdProduct,
+                                                                product.ProductId,
+                                                                product.ProductName,
+                                                                product.Unit,
+                                                                product.Amount,
+                                                                product._id,
+                                                            )
+                                                        }
+                                                    >
+                                                        <IconPackageExport size="1.125rem" />
+                                                    </ActionIcon>
+                                                </>
+                                            ) : null}
+                                        </Center>
                                     </td>
                                 </tr>
                             );
@@ -162,7 +222,7 @@ const TableFloor = () => {
                     }
                 } else {
                     content = (
-                        <tr>
+                        <tr key={item._id}>
                             <td>{item.FloorName}</td>
                             <td></td>
                             <td></td>
@@ -170,18 +230,20 @@ const TableFloor = () => {
                             <td></td>
                             <td></td>
                             <td>
-                                <ActionIcon
-                                    variant="filled"
-                                    color="green"
-                                    onClick={() =>
-                                        onAddProductClicked(
-                                            item.FloorId,
-                                            item.FloorName,
-                                        )
-                                    }
-                                >
-                                    <IconPlus size="1.125rem" />
-                                </ActionIcon>
+                                <Center>
+                                    <ActionIcon
+                                        variant="filled"
+                                        color="green"
+                                        onClick={() =>
+                                            onAddProductClicked(
+                                                item.FloorId,
+                                                item.FloorName,
+                                            )
+                                        }
+                                    >
+                                        <IconPlus size="1.125rem" />
+                                    </ActionIcon>
+                                </Center>
                             </td>
                         </tr>
                     );
@@ -200,9 +262,31 @@ const TableFloor = () => {
         open();
     };
 
+    const onExportClicked = (
+        id: string,
+        name: string,
+        idProduct: string,
+        productId: string,
+        productName: string,
+        unit: string,
+        amount: number,
+        productInFloorId: string,
+    ) => {
+        setName(name);
+        setId(id);
+        setIdProduct(idProduct);
+        setProductId(productId);
+        setProductName(productName);
+        setUnit(unit);
+        setAmount(amount);
+        setProductInFloorId(productInFloorId);
+
+        exportModalHandle.open();
+    };
+
     return (
         <>
-            <Table>
+            <Table striped highlightOnHover withBorder withColumnBorders>
                 <thead>
                     <tr>
                         <th>Tên tầng</th>
@@ -231,6 +315,27 @@ const TableFloor = () => {
                 <hr />
                 <Space h="md" />
                 <Product name={name} id={id} />
+            </Modal>
+
+            <Modal
+                opened={openedExportModal}
+                onClose={exportModalHandle.close}
+                title="Xuất sản phẩm"
+                centered
+                size="50%"
+                fullScreen={isMobile}
+                transitionProps={{ transition: 'fade', duration: 200 }}
+            >
+                <ExportProduct
+                    floorName={name}
+                    floorId={id}
+                    idProduct={idProduct}
+                    productName={productName}
+                    productId={productId}
+                    unit={unit}
+                    amount={amount}
+                    productInFloorId={productInFloorId}
+                />
             </Modal>
         </>
     );

@@ -17,6 +17,11 @@ router.post('/InsertListProduct', ListProductController.InsertListProduct);
 
 router.patch('/UpdateListProduct', ListProductController.UpdateListProduct);
 
+router.patch(
+    '/UpdateAmountListProduct',
+    ListProductController.UpdateAmountListProduct,
+);
+
 router.delete('/DeleteListProduct', ListProductController.DeleteListProduct);
 
 module.exports = router;

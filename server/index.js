@@ -10,6 +10,7 @@ const StockRouter = require('./routers/stock.router');
 const FloorRouter = require('./routers/floor.router');
 const ProductRouter = require('./routers/product.router');
 const ListProductRouter = require('./routers/listProduct.router');
+const ExportHistoryRouter = require('./routers/exportHistory.router');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api', StockRouter);
 app.use('/api', FloorRouter);
 app.use('/api', ProductRouter);
 app.use('/api', ListProductRouter);
+app.use('/api', ExportHistoryRouter);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });
