@@ -1,12 +1,12 @@
 import {
-  Code,
-  createStyles,
-  Group,
-  Navbar,
-  ScrollArea,
-  Text,
+	Code,
+	createStyles,
+	Group,
+	Navbar,
+	ScrollArea,
+	Text,
 } from "@mantine/core";
-import { IconMapPin } from "@tabler/icons-react";
+import { IconMapPin, IconPackageExport } from "@tabler/icons-react";
 import { LinksGroup } from "./navbarLinkGroup";
 
 const mockdata = [
@@ -14,6 +14,11 @@ const mockdata = [
     label: "Tổng quan",
     icon: IconMapPin,
     links: [{ label: "Tổng quan", link: "/" }],
+  },
+  {
+    label: "Lịch sử xuất hàng",
+    icon: IconPackageExport,
+    links: [{ label: "Lịch sử xuất hàng", link: "/export" }],
   },
 ];
 

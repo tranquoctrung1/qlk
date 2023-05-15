@@ -123,6 +123,9 @@ const ExportProduct = ({
                         FloorId: floorId,
                     };
 
+                    //@ts-ignore
+                    formValue.ExportDate = formValue.ExportDate.getTime();
+
                     let insertExport = axios.post(urlInsertExport, formValue);
                     let updateAmountListProduct = axios.patch(
                         urlUpdateAmountListProduct,

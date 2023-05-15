@@ -221,7 +221,7 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                 FloorId: formValue.FloorId,
                 FloorName: formValue.FloorName,
                 Amount: formValue.Amount,
-                ImportDate: formValue.ImportDate,
+                ImportDate: formValue.ImportDate.getTime(),
                 Unit: formValue.Unit,
             };
 
@@ -291,6 +291,9 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
 
         if (isAllow) {
             let url = `${hostname}/UpdateListProduct`;
+
+            //@ts-ignore
+            formValue.ImportDate = formValue.ImportDate.getTime();
 
             axios.patch(url, formValue).then((res) => {
                 if (res.status === 200) {

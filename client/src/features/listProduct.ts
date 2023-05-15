@@ -92,6 +92,33 @@ export const ListProductSlice = createSlice({
                 );
             }
         },
+
+        addOrUpdateProductToListProduct: (state, action) => {
+            // @ts-ignore
+            let index = state.value.findIndex(
+                // @ts-ignore
+                (el) => el.FloorId === action.payload.FloorId,
+            );
+
+            if (index >= 0) {
+                // @ts-ignore
+                let tempIndex = state.value[index].ListProduct.findIndex(
+                    //@ts-ignore
+                    (el) => el.IdProduct === action.payload.IdProduct,
+                );
+
+                if (tempIndex >= 0) {
+                    //@ts-ignore
+                    state.value[index].ListProduct[tempIndex].Amount =
+                        //@ts-ignore
+                        state.value[index].ListProduct[tempIndex].Amount +
+                        action.payload.Amount;
+                } else {
+                    // @ts-ignore
+                    state.value[index].ListProduct.push(action.payload);
+                }
+            }
+        },
     },
 });
 
@@ -101,6 +128,7 @@ export const {
     updateProductToListProduct,
     deleteProductToListProduct,
     updateAmountProductToListProduct,
+    addOrUpdateProductToListProduct,
 } = ListProductSlice.actions;
 
 export const ListProductState = (state: RootState) => state.listproducts.value;

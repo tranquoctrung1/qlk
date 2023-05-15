@@ -5,12 +5,17 @@ import { HostnameState } from '../features/hostname';
 import { ListProductState, addListProducts } from '../features/listProduct';
 
 import { ActionIcon, Center, Modal, Space, Table } from '@mantine/core';
-import { IconPackageExport, IconPlus } from '@tabler/icons-react';
+import {
+	IconArrowsExchange,
+	IconPackageExport,
+	IconPlus,
+} from '@tabler/icons-react';
 
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
 import { useEffect, useState } from 'react';
 
+import ExchangeProduct from './exchangeProduct';
 import ExportProduct from './exportProduct';
 import Product from './product';
 import ProductInFloor from './productInFloor';
@@ -36,6 +41,8 @@ const TableFloor = () => {
 
     const [opened, { open, close }] = useDisclosure(false);
     const [openedExportModal, exportModalHandle] = useDisclosure(false);
+    const [openedExchageModal, exchangeModalHandle] = useDisclosure(false);
+
     const isMobile = useMediaQuery('(max-width: 50em)');
 
     const getListProductByCabinetId = (id: string) => {
@@ -157,6 +164,25 @@ const TableFloor = () => {
                                                     </ActionIcon>
                                                 </>
                                             ) : null}
+                                            <Space w="md" />
+                                            <ActionIcon
+                                                variant="filled"
+                                                color="lime"
+                                                onClick={() =>
+                                                    onExchangeClicked(
+                                                        item.FloorId,
+                                                        item.FloorName,
+                                                        product.IdProduct,
+                                                        product.ProductId,
+                                                        product.ProductName,
+                                                        product.Unit,
+                                                        product.Amount,
+                                                        product._id,
+                                                    )
+                                                }
+                                            >
+                                                <IconArrowsExchange size="1.125rem" />
+                                            </ActionIcon>
                                         </Center>
                                     </td>
                                 </tr>
@@ -213,6 +239,25 @@ const TableFloor = () => {
                                                     </ActionIcon>
                                                 </>
                                             ) : null}
+                                            <Space w="md" />
+                                            <ActionIcon
+                                                variant="filled"
+                                                color="lime"
+                                                onClick={() =>
+                                                    onExchangeClicked(
+                                                        item.FloorId,
+                                                        item.FloorName,
+                                                        product.IdProduct,
+                                                        product.ProductId,
+                                                        product.ProductName,
+                                                        product.Unit,
+                                                        product.Amount,
+                                                        product._id,
+                                                    )
+                                                }
+                                            >
+                                                <IconArrowsExchange size="1.125rem" />
+                                            </ActionIcon>
                                         </Center>
                                     </td>
                                 </tr>
@@ -284,6 +329,28 @@ const TableFloor = () => {
         exportModalHandle.open();
     };
 
+    const onExchangeClicked = (
+        id: string,
+        name: string,
+        idProduct: string,
+        productId: string,
+        productName: string,
+        unit: string,
+        amount: number,
+        productInFloorId: string,
+    ) => {
+        setName(name);
+        setId(id);
+        setIdProduct(idProduct);
+        setProductId(productId);
+        setProductName(productName);
+        setUnit(unit);
+        setAmount(amount);
+        setProductInFloorId(productInFloorId);
+
+        exchangeModalHandle.open();
+    };
+
     return (
         <>
             <Table striped highlightOnHover withBorder withColumnBorders>
@@ -327,6 +394,27 @@ const TableFloor = () => {
                 transitionProps={{ transition: 'fade', duration: 200 }}
             >
                 <ExportProduct
+                    floorName={name}
+                    floorId={id}
+                    idProduct={idProduct}
+                    productName={productName}
+                    productId={productId}
+                    unit={unit}
+                    amount={amount}
+                    productInFloorId={productInFloorId}
+                />
+            </Modal>
+
+            <Modal
+                opened={openedExchageModal}
+                onClose={exchangeModalHandle.close}
+                title="Chuyển đổi sản phẩm"
+                centered
+                size="75%"
+                fullScreen={isMobile}
+                transitionProps={{ transition: 'fade', duration: 200 }}
+            >
+                <ExchangeProduct
                     floorName={name}
                     floorId={id}
                     idProduct={idProduct}

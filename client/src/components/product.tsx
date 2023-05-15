@@ -90,6 +90,7 @@ const Product = ({ id, name }: ProductModalInterface) => {
             ImportDate: new Date(Date.now()),
             Unit: '',
             BaseAlarm: 0,
+            Price: 0,
         },
     });
 
@@ -121,6 +122,8 @@ const Product = ({ id, name }: ProductModalInterface) => {
             setValue('BaseAlarm', find.BaseAlarm);
             //@ts-ignore
             setValue('_id', find._id);
+            //@ts-ignore
+            setValue('Price', find.Price);
         }
     };
 
@@ -139,6 +142,8 @@ const Product = ({ id, name }: ProductModalInterface) => {
             setValue('BaseAlarm', 0);
             //@ts-ignore
             setValue('_id', '');
+            // @ts-ignore
+            setValue('Price', 0);
         }
     };
 
@@ -185,9 +190,10 @@ const Product = ({ id, name }: ProductModalInterface) => {
             let obj = {
                 ProductID: formValue.ProductID,
                 Name: formValue.Name,
-                ImportDate: formValue.ImportDate,
+                ImportDate: formValue.ImportDate.getTime(),
                 Unit: formValue.Unit,
                 BaseAlarm: formValue.BaseAlarm,
+                Price: formValue.Price,
             };
 
             axios
@@ -256,6 +262,9 @@ const Product = ({ id, name }: ProductModalInterface) => {
 
         if (isAllow) {
             let url = `${hostname}/UpdateProduct`;
+
+            //@ts-ignore
+            formValue.ImportDate = formValue.ImportDate.getTime();
 
             axios
                 .patch(url, formValue)
@@ -437,6 +446,21 @@ const Product = ({ id, name }: ProductModalInterface) => {
                             <TextInput
                                 placeholder="Đơn vị"
                                 label="Đơn vị"
+                                {...field}
+                            />
+                        )}
+                    ></Controller>
+                </Col>
+                <Col md={6}>
+                    <Controller
+                        name="Price"
+                        control={control}
+                        render={({ field }) => (
+                            <NumberInput
+                                defaultValue={getValues().Price}
+                                placeholder="Đơn giá"
+                                label="Đơn giá"
+                                variant="filled"
                                 {...field}
                             />
                         )}

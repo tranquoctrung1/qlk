@@ -56,7 +56,7 @@ const District3Stock = () => {
                         <Col span={12}>
                             <Cabinet
                                 name="Kệ 2"
-                                id="12312312312312"
+                                id="6461cff09aa654dac9e0a327"
                                 isCabinet={true}
                             />
                         </Col>
