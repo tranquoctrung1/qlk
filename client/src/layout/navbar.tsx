@@ -14,6 +14,8 @@ import {
 } from '@tabler/icons-react';
 import { LinksGroup } from './navbarLinkGroup';
 
+import { Navigate, useNavigate } from 'react-router-dom';
+
 import jwt_decode from 'jwt-decode';
 
 const mockdataAdmin = [
@@ -99,10 +101,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function NavbarNested() {
+    const navigate = useNavigate();
+
     const { classes } = useStyles();
 
     const token = localStorage.getItem('token');
-
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
     //@ts-ignore
     let decodeToken = jwt_decode(token);
     let links;
