@@ -4,6 +4,11 @@ const router = express.Router();
 const ListProductController = require('../controllers/listProduct.controller');
 
 router.get(
+    '/GetListProductByStockId',
+    ListProductController.GetListProductByStockId,
+);
+
+router.get(
     '/GetListProductByFloorId',
     ListProductController.GetListProductByFloorId,
 );
@@ -23,5 +28,10 @@ router.patch(
 );
 
 router.delete('/DeleteListProduct', ListProductController.DeleteListProduct);
+
+router.post(
+    '/InsertOrUpdateProductToListProduct',
+    ListProductController.InsertOrUpdateProductToListProduct,
+);
 
 module.exports = router;

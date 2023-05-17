@@ -36,7 +36,7 @@ module.exports.GetCabinetByStockId = async (id) => {
 
         let result = await collection
             .find({ IdStock: id })
-            .sort({ Name: 1 })
+            .sort({ Name: -1 })
             .toArray();
 
         Connect.disconnect();

@@ -17,7 +17,7 @@ import axios from 'axios';
 
 import { useEffect, useState } from 'react';
 
-const ExportHistory = () => {
+const ExchangeHistory = () => {
     const hostname = useSelector(HostnameState);
 
     const [startDate, setStartDate] = useState(null);
@@ -27,46 +27,30 @@ const ExportHistory = () => {
     const [errorStartDate, setErrorStartDate] = useState('');
     const [errorEndDate, setErrorEndDate] = useState('');
 
-    const getExportHistory = () => {
-        let url = `${hostname}/GetListExportHistory`;
+    const getExchangeHistory = () => {
+        let url = `${hostname}/GetListExchangeHistory`;
 
         axios
             .get(url)
             .then((res) => {
                 if (res.status === 200) {
                     if (res.data.length > 0) {
-                        let totalPriceForListProduct = 0;
-
-                        for (let item of res.data) {
-                            if (
-                                item.TotalPrice !== null &&
-                                item.TotalPrice !== undefined
-                            ) {
-                                totalPriceForListProduct += item.TotalPrice;
-                            } else {
-                                totalPriceForListProduct += 0;
-                            }
-                        }
-
-                        let obj = {
-                            StockName: 'Tổng cộng',
-                            TotalPrice: totalPriceForListProduct,
-                        };
-
                         // @ts-ignore
-                        setData([...res.data, obj]);
+                        setData([...res.data]);
                         setStartDate(
                             // @ts-ignore
-                            new Date(res.data[res.data.length - 1].ExportDate),
+                            new Date(
+                                res.data[res.data.length - 1].ExchangeDate,
+                            ),
                         );
                         // @ts-ignore
-                        setEndDate(new Date(res.data[0].ExportDate));
+                        setEndDate(new Date(res.data[0].ExchangeDate));
 
                         setTitle(
-                            `Danh sách các sản phẩm đã xuất từ ngày ${convertDateNotTimeToString(
-                                res.data[res.data.length - 1].ExportDate,
+                            `Danh sách các sản phẩm đã chuyển từ ngày ${convertDateNotTimeToString(
+                                res.data[res.data.length - 1].ExchangeDate,
                             )} đến ngày ${convertDateNotTimeToString(
-                                res.data[0].ExportDate,
+                                res.data[0].ExchangeDate,
                             )}`,
                         );
                     }
@@ -75,46 +59,30 @@ const ExportHistory = () => {
             .catch((err) => console.log(err));
     };
 
-    const getExportHistoryByTimeStamp = (start: any, end: any) => {
-        let url = `${hostname}/GetListExportHistoryByTimeStamp?start=${start}&end=${end}`;
+    const getExchangeHistoryByTimeStamp = (start: any, end: any) => {
+        let url = `${hostname}/GetListExchangeHistoryByTimeStamp?start=${start}&end=${end}`;
 
         axios
             .get(url)
             .then((res) => {
                 if (res.status === 200) {
                     if (res.data.length > 0) {
-                        let totalPriceForListProduct = 0;
-
-                        for (let item of res.data) {
-                            if (
-                                item.TotalPrice !== null &&
-                                item.TotalPrice !== undefined
-                            ) {
-                                totalPriceForListProduct += item.TotalPrice;
-                            } else {
-                                totalPriceForListProduct += 0;
-                            }
-                        }
-
-                        let obj = {
-                            StockName: 'Tổng cộng',
-                            TotalPrice: totalPriceForListProduct,
-                        };
-
                         // @ts-ignore
-                        setData([...res.data, obj]);
+                        setData([...res.data]);
                         setStartDate(
                             // @ts-ignore
-                            new Date(res.data[res.data.length - 1].ExportDate),
+                            new Date(
+                                res.data[res.data.length - 1].ExchangeDate,
+                            ),
                         );
                         // @ts-ignore
-                        setEndDate(new Date(res.data[0].ExportDate));
+                        setEndDate(new Date(res.data[0].ExchangeDate));
 
                         setTitle(
-                            `Danh sách các sản phẩm đã xuất từ ngày ${convertDateNotTimeToString(
-                                res.data[res.data.length - 1].ExportDate,
+                            `Danh sách các sản phẩm đã chuyển từ ngày ${convertDateNotTimeToString(
+                                res.data[res.data.length - 1].ExchangeDate,
                             )} đến ngày ${convertDateNotTimeToString(
-                                res.data[0].ExportDate,
+                                res.data[0].ExchangeDate,
                             )}`,
                         );
                     }
@@ -124,7 +92,7 @@ const ExportHistory = () => {
     };
 
     useEffect(() => {
-        getExportHistory();
+        getExchangeHistory();
     }, []);
 
     const convertDateToString = (time: any) => {
@@ -189,16 +157,40 @@ const ExportHistory = () => {
 
     const columns = [
         {
-            name: 'Tên kho',
-            selector: (row: any) => row.StockName,
+            name: 'Từ kho',
+            selector: (row: any) => row.FromStockName,
             sortable: true,
-            cellExport: (row: any) => row.StockName,
+            cellExport: (row: any) => row.FromStockName,
         },
         {
-            name: 'Tên kệ',
-            selector: (row: any) => row.CabinetName,
+            name: 'Từ kệ',
+            selector: (row: any) => row.FromCabinetName,
             sortable: true,
-            cellExport: (row: any) => row.CabinetName,
+            cellExport: (row: any) => row.FromCabinetName,
+        },
+        {
+            name: 'Từ tầng',
+            selector: (row: any) => row.FromFloorName,
+            sortable: true,
+            cellExport: (row: any) => row.FromFloorName,
+        },
+        {
+            name: 'Đến kho',
+            selector: (row: any) => row.ToStockName,
+            sortable: true,
+            cellExport: (row: any) => row.ToStockName,
+        },
+        {
+            name: 'Đến kệ',
+            selector: (row: any) => row.ToCabinetName,
+            sortable: true,
+            cellExport: (row: any) => row.ToCabinetName,
+        },
+        {
+            name: 'Đến tầng',
+            selector: (row: any) => row.ToFloorName,
+            sortable: true,
+            cellExport: (row: any) => row.ToFloorName,
         },
         {
             name: 'Mã sản phẩm',
@@ -219,29 +211,17 @@ const ExportHistory = () => {
             cellExport: (row: any) => row.Unit,
         },
         {
-            name: 'Ngày xuất',
-            selector: (row: any) => row.ExportDate,
-            format: (row: any) => convertDateToString(row.ExportDate),
+            name: 'Ngày chuyển',
+            selector: (row: any) => row.ExchangeDate,
+            format: (row: any) => convertDateToString(row.ExchangeDate),
             sortable: true,
-            cellExport: (row: any) => row.ExportDate,
+            cellExport: (row: any) => row.ExchangeDate,
         },
         {
             name: 'Số lượng',
             selector: (row: any) => row.Amount,
             sortable: true,
             cellExport: (row: any) => row.Amount,
-        },
-        {
-            name: 'Đơn giá',
-            selector: (row: any) => row.Price,
-            sortable: true,
-            cellExport: (row: any) => row.Price,
-        },
-        {
-            name: 'Thành tiền',
-            selector: (row: any) => row.TotalPrice,
-            sortable: true,
-            cellExport: (row: any) => row.TotalPrice,
         },
     ];
 
@@ -258,7 +238,7 @@ const ExportHistory = () => {
         setEndDate(e);
     };
 
-    const onViewExportHistoryClicked = () => {
+    const onViewExchangeHistoryClicked = () => {
         let isAllow = true;
         if (startDate === null || startDate === undefined) {
             setErrorStartDate('Thời gian bắt đầu không được trống!!!');
@@ -280,7 +260,7 @@ const ExportHistory = () => {
             // @ts-ignore
             let totalMilisecondEnd = endDate.getTime();
 
-            getExportHistoryByTimeStamp(
+            getExchangeHistoryByTimeStamp(
                 totalMilisecondStart,
                 totalMilisecondEnd,
             );
@@ -325,7 +305,7 @@ const ExportHistory = () => {
                     <Button
                         color="green"
                         variant="filled"
-                        onClick={onViewExportHistoryClicked}
+                        onClick={onViewExchangeHistoryClicked}
                     >
                         Xem
                     </Button>
@@ -353,4 +333,4 @@ const ExportHistory = () => {
     );
 };
 
-export default ExportHistory;
+export default ExchangeHistory;

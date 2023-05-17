@@ -43,6 +43,8 @@ const ExchangeProduct = ({
     unit,
     amount,
     productInFloorId,
+    cabinetId,
+    cabinetName,
 }: ExchangeProductModalInterface) => {
     const hostname = useSelector(HostnameState);
     const currentCabinet = useSelector(CurrentCabinetState);
@@ -68,10 +70,8 @@ const ExchangeProduct = ({
             IdFromStock: currentStock.id === undefined ? '' : currentStock.id,
             FromStockName:
                 currentStock.name === undefined ? '' : currentStock.name,
-            IdFromCabinet:
-                currentCabinet.id === undefined ? '' : currentCabinet.id,
-            FromCabinetName:
-                currentCabinet.name === undefined ? '' : currentCabinet.name,
+            IdFromCabinet: cabinetId === undefined ? '' : cabinetId,
+            FromCabinetName: cabinetName === undefined ? '' : cabinetName,
             IdFromFloor: floorId === undefined ? '' : floorId,
             FromFloorName: floorName === undefined ? '' : floorName,
             IdProduct: idProduct === undefined ? '' : idProduct,
@@ -390,7 +390,7 @@ const ExchangeProduct = ({
                 <TextInput
                     placeholder="Từ kệ"
                     label="Từ kệ"
-                    defaultValue={currentCabinet.name}
+                    defaultValue={cabinetName}
                     disabled
                 ></TextInput>
             </Col>

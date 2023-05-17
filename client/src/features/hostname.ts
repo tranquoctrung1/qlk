@@ -7,7 +7,7 @@ interface HostnameState {
 }
 
 const initialState: HostnameState = {
-    value: 'http://localhost:3001/api',
+    value: 'http://103.179.191.158:3001/api',
 };
 
 export const HostnameSlice = createSlice({

@@ -37,6 +37,8 @@ const ExportProduct = ({
     unit,
     amount,
     productInFloorId,
+    cabinetId,
+    cabinetName,
 }: ExportProductModalInterface) => {
     const hostname = useSelector(HostnameState);
     const currentCabinet = useSelector(CurrentCabinetState);
@@ -55,9 +57,8 @@ const ExportProduct = ({
             ProductName: productName === undefined ? '' : productName,
             FloorId: floorId === undefined ? '' : floorId,
             FloorName: floorName === undefined ? '' : floorName,
-            CabinetId: currentCabinet.id === undefined ? '' : currentCabinet.id,
-            CabinetName:
-                currentCabinet.name === undefined ? '' : currentCabinet.name,
+            CabinetId: cabinetId === undefined ? '' : cabinetId,
+            CabinetName: cabinetName === undefined ? '' : cabinetName,
             StockId: currentStock.id === undefined ? '' : currentStock.id,
             StockName: currentStock.name === undefined ? '' : currentStock.name,
             Amount: amount === undefined ? 0 : amount,
@@ -186,7 +187,7 @@ const ExportProduct = ({
                 <TextInput
                     placeholder="Tên kệ"
                     label="Tên kệ"
-                    defaultValue={currentCabinet.name}
+                    defaultValue={cabinetName}
                     disabled
                 ></TextInput>
             </Col>

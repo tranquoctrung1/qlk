@@ -11,7 +11,7 @@ import {
     IconCalendarStats,
     IconChevronLeft,
     IconChevronRight,
-    TablerIcon,
+    IconTable,
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -72,6 +72,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface LinksGroupProps {
+    //@ts-ignore
     icon: TablerIcon;
     label: string;
     initiallyOpened?: boolean;

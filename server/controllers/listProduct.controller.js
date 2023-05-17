@@ -1,5 +1,47 @@
 const ListProductModel = require('../models/listProducts.model');
 const FloorModel = require('../models/floor.model');
+const CabinetModel = require('../models/cabinet.model');
+
+module.exports.GetListProductByStockId = async (req, res) => {
+    try {
+        let { id } = req.query;
+
+        let result = [];
+
+        let listCabinet = await CabinetModel.GetCabinetByStockId(id);
+
+        if (listCabinet.length > 0) {
+            for (let cabinet of listCabinet) {
+                let listFloor = await FloorModel.GetFloorByCabinetId(
+                    cabinet._id.toString(),
+                );
+
+                if (listFloor.length > 0) {
+                    for (let floor of listFloor) {
+                        let temp =
+                            await ListProductModel.GetListProductByFloorId(
+                                floor._id.toString(),
+                            );
+
+                        let obj = {
+                            CabinetId: cabinet._id,
+                            CabinetName: cabinet.Name,
+                            FloorId: floor._id,
+                            FloorName: floor.Name,
+                            ListProduct: temp,
+                        };
+
+                        result.push(obj);
+                    }
+                }
+            }
+        }
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ err: err });
+    }
+};
 
 module.exports.GetListProductByFloorId = async (req, res) => {
     try {
@@ -85,6 +127,18 @@ module.exports.GetListProductByCabinetId = async (req, res) => {
                 result.push(obj);
             }
         }
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+module.exports.InsertOrUpdateProductToListProduct = async (req, res) => {
+    try {
+        let product = req.body;
+
+        let result = await ListProductModel.InsertOrUpdateProduct(product);
 
         res.status(200).json(result);
     } catch (err) {

@@ -14,12 +14,29 @@ import District8Stock from '../components/district8Stock';
 
 import TableFloor from '../components/tableFloor';
 
+import { HostnameState } from '../features/hostname';
+import { ListProductState, addListProducts } from '../features/listProduct';
+
 const DashBoardPage = () => {
     const currentStock = useSelector(CurrentStockState);
+    const hostname = useSelector(HostnameState);
+    const listProduct = useSelector(ListProductState);
+
+    const dispatch = useDispatch();
+
+    const getListProductByStockId = (id: string) => {
+        let url = `${hostname}/GetListProductByStockId?id=${id}`;
+
+        axios.get(url).then((res) => {
+            if (res.status === 200) {
+                dispatch(addListProducts(res.data));
+            }
+        });
+    };
 
     useEffect(() => {
-        console.log(currentStock);
-    }, [currentStock]);
+        getListProductByStockId(currentStock.id);
+    }, [currentStock.id]);
 
     return (
         <>

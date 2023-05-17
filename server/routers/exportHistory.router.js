@@ -7,6 +7,12 @@ router.get(
     '/GetListExportHistory',
     ExportHistoryController.GetListExportHistory,
 );
+
+router.get(
+    '/GetListExportHistoryByTimeStamp',
+    ExportHistoryController.GetListExportHistoryByTimeStamp,
+);
+
 router.post(
     '/InsertExportHistory',
     ExportHistoryController.InsertExportHistory,

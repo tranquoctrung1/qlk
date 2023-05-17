@@ -34,7 +34,20 @@ import Swal from 'sweetalert2';
 
 import ProductInFloorModalInterface from '../types/productInFloor.type';
 
-const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
+const ProductInFloor = ({
+    name,
+    id,
+    cabinetId,
+    cabinetName,
+    idProduct,
+    productId,
+    productName,
+    unit,
+    amount,
+    baseAlarm,
+    importDate,
+    productInFloorId,
+}: ProductInFloorModalInterface) => {
     const hostname = useSelector(HostnameState);
     const currentStock = useSelector(CurrentStockState);
     const currentCabinet = useSelector(CurrentCabinetState);
@@ -90,15 +103,17 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
 
     const { control, getValues, reset, setValue, register } = useForm({
         defaultValues: {
-            _id: '',
-            IdProduct: '',
-            ProductId: '',
-            ProductName: '',
+            _id: productInFloorId === undefined ? '' : productInFloorId,
+            IdProduct: idProduct === undefined ? '' : idProduct,
+            ProductId: productId === undefined ? '' : productId,
+            ProductName: productName === undefined ? '' : productName,
             FloorId: id === undefined ? '' : id,
             FloorName: name === undefined ? '' : name,
-            Amount: 0,
-            ImportDate: new Date(),
-            Unit: '',
+            Amount: amount === undefined ? 0 : amount,
+            ImportDate:
+                importDate === undefined ? new Date() : new Date(importDate),
+            Unit: unit === undefined ? '' : unit,
+            BaseAlarm: baseAlarm === undefined ? 0 : baseAlarm,
         },
     });
 
@@ -140,6 +155,8 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
             }
             //@ts-ignore
             setValue('Unit', find.Unit);
+            //@ts-ignore
+            setValue('BaseAlarm', find.BaseAlarm);
         } else {
             setErrorProductId('Mã sản phẩm này chưa có trong kệ');
             //@ts-ignore
@@ -170,6 +187,8 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                 }
                 //@ts-ignore
                 setValue('Unit', temp.Unit);
+                //@ts-ignore
+                setValue('BaseAlarm', 0);
             }
         }
     };
@@ -223,6 +242,7 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                 Amount: formValue.Amount,
                 ImportDate: formValue.ImportDate.getTime(),
                 Unit: formValue.Unit,
+                BaseAlarm: formValue.BaseAlarm,
             };
 
             axios.post(url, obj).then((res) => {
@@ -254,6 +274,9 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
 
     const onUpdateProductInFloorClick = () => {
         let formValue = getValues();
+
+        console.log(formValue);
+
         let isAllow = true;
 
         if (
@@ -400,7 +423,7 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                     <TextInput
                         placeholder="Tên kệ"
                         label="Tên kệ"
-                        defaultValue={currentCabinet.name}
+                        defaultValue={cabinetName}
                         disabled
                     ></TextInput>
                 </Col>
@@ -469,6 +492,20 @@ const ProductInFloor = ({ name, id }: ProductInFloorModalInterface) => {
                             <NumberInput
                                 placeholder="Số lượng trên kệ"
                                 label="Số lượng trên kệ"
+                                variant="filled"
+                                {...field}
+                            />
+                        )}
+                    ></Controller>
+                </Col>
+                <Col md={6}>
+                    <Controller
+                        name="BaseAlarm"
+                        control={control}
+                        render={({ field }) => (
+                            <NumberInput
+                                placeholder="Mức cảnh báo"
+                                label="Mức cảnh báo"
                                 variant="filled"
                                 {...field}
                             />

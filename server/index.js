@@ -11,6 +11,10 @@ const FloorRouter = require('./routers/floor.router');
 const ProductRouter = require('./routers/product.router');
 const ListProductRouter = require('./routers/listProduct.router');
 const ExportHistoryRouter = require('./routers/exportHistory.router');
+const CabinetRouter = require('./routers/cabinet.router');
+const ExchangeHistoryRouter = require('./routers/exchangeHistory.router');
+const UserRouter = require('./routers/user.router');
+const LoginRouter = require('./routers/login.router');
 
 const app = express();
 
@@ -30,6 +34,10 @@ app.use('/api', FloorRouter);
 app.use('/api', ProductRouter);
 app.use('/api', ListProductRouter);
 app.use('/api', ExportHistoryRouter);
+app.use('/api', CabinetRouter);
+app.use('/api', ExchangeHistoryRouter);
+app.use('/api', UserRouter);
+app.use('/api', LoginRouter);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });

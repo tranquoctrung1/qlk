@@ -17,6 +17,8 @@ module.exports.ExportHistory = class ExportHistory {
         Amount,
         Unit,
         ExportDate,
+        Price,
+        TotalPrice,
     ) {
         this._id = _id;
         this.IdProduct = IdProduct;
@@ -31,6 +33,8 @@ module.exports.ExportHistory = class ExportHistory {
         this.Amount = Amount;
         this.ExportDate = ExportDate;
         this.Unit = Unit;
+        this.Price = Price;
+        this.TotalPrice = TotalPrice;
     }
 };
 
@@ -40,7 +44,34 @@ module.exports.GetListExportHistory = async () => {
 
         let collection = await Connect.connect(ExportHistoryCollection);
 
-        let result = await collection.find().sort({ ExportDate: -1 }).toArray();
+        let result = await collection
+            .find()
+            .sort({ ExportDate: -1 })
+            .limit(100)
+            .toArray();
+
+        Connect.disconnect();
+
+        return result;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+module.exports.GetListExportHistoryByTimeStamp = async (start, end) => {
+    try {
+        let startDate = new Date(parseInt(start));
+
+        let endDate = new Date(parseInt(end));
+
+        let Connect = new ConnectDB.Connect();
+
+        let collection = await Connect.connect(ExportHistoryCollection);
+
+        let result = await collection
+            .find({ ExportDate: { $gte: startDate, $lte: endDate } })
+            .sort({ ExportDate: -1 })
+            .toArray();
 
         Connect.disconnect();
 
@@ -58,14 +89,9 @@ module.exports.Insert = async (history) => {
 
         let collection = await Connect.connect(ExportHistoryCollection);
 
-        let check = await collection
-            .find({ FloorId: history.FloorId, IdProduct: history.IdProduct })
-            .toArray();
-
-        if (check.length <= 0) {
-            result = await collection.insertOne(history);
-            result = result.insertedId;
-        }
+        history.ExportDate = new Date(history.ExportDate);
+        result = await collection.insertOne(history);
+        result = result.insertedId;
 
         Connect.disconnect();
 

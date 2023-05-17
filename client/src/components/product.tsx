@@ -466,21 +466,6 @@ const Product = ({ id, name }: ProductModalInterface) => {
                         )}
                     ></Controller>
                 </Col>
-                <Col md={6}>
-                    <Controller
-                        name="BaseAlarm"
-                        control={control}
-                        render={({ field }) => (
-                            <NumberInput
-                                defaultValue={getValues().BaseAlarm}
-                                placeholder="Ngưỡng cảnh báo"
-                                label="Ngưỡng cảnh báo"
-                                variant="filled"
-                                {...field}
-                            />
-                        )}
-                    ></Controller>
-                </Col>
                 <Col span={12}>
                     <Center>
                         <Button color="green" onClick={onAddProductClicked}>

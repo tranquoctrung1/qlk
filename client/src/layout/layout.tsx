@@ -249,8 +249,7 @@ const Layout = () => {
                     >
                         <AnimatePresence>
                             <div id="detail">
-                                {localStorage.getItem('username') &&
-                                localStorage.getItem('username') === 'admin' ? (
+                                {localStorage.getItem('username') ? (
                                     <Outlet />
                                 ) : (
                                     <Navigate to="/login" />

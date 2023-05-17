@@ -22,35 +22,35 @@ const District8Stock = () => {
                         <Col span={12}>
                             <Cabinet
                                 name="Kệ 5"
-                                id="1231231231231"
+                                id="64636a749aa654dac9e0de42"
                                 isCabinet={true}
                             />
                         </Col>
                         <Col span={3}>
                             <Cabinet
                                 name="Kệ 1"
-                                id="1231231231231"
+                                id="64636a539aa654dac9e0de32"
                                 isCabinet={true}
                             />
                         </Col>
                         <Col span={3}>
                             <Cabinet
                                 name="Kệ 2"
-                                id="1231231231231"
+                                id="64636a5d9aa654dac9e0de39"
                                 isCabinet={true}
                             />
                         </Col>
                         <Col span={3}>
                             <Cabinet
                                 name="Kệ 3"
-                                id="1231231231231"
+                                id="64636a689aa654dac9e0de3c"
                                 isCabinet={true}
                             />
                         </Col>
                         <Col span={3}>
                             <Cabinet
                                 name="Kệ 4"
-                                id="1231231231231"
+                                id="64636a6d9aa654dac9e0de3f"
                                 isCabinet={true}
                             />
                         </Col>

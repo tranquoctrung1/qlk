@@ -56,6 +56,7 @@ module.exports.Insert = async (product) => {
             .toArray();
 
         if (check.length <= 0) {
+            product.ImportDate = new Date(product.ImportDate);
             result = await collection.insertOne(product);
             result = result.insertedId;
         }
@@ -82,7 +83,7 @@ module.exports.Update = async (product) => {
                 $set: {
                     ProductId: product.ProductId,
                     ProductName: product.ProductName,
-                    ImportDate: product.ImportDate,
+                    ImportDate: new Date(product.ImportDate),
                     Unit: product.Unit,
                     Amount: product.Amount,
                 },
@@ -141,6 +142,50 @@ module.exports.Delete = async (id) => {
         let result = await collection.deleteMany({ _id: new ObjectId(id) });
 
         return result.deletedCount;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+module.exports.InsertOrUpdateProduct = async (product) => {
+    try {
+        let Connect = new ConnectDB.Connect();
+
+        let collection = await Connect.connect(ListProductCollection);
+
+        let result;
+
+        let check = await collection
+            .find({ IdProduct: product.IdProduct, FloorId: product.FloorId })
+            .toArray();
+
+        if (check.length > 0) {
+            if (check[0].Amount != null && check[0].Amount != undefined) {
+                product.Amount = check[0].Amount + product.Amount;
+            }
+            result = await collection.updateMany(
+                {
+                    IdProduct: product.IdProduct,
+                    FloorId: product.FloorId,
+                },
+                {
+                    $set: {
+                        Amount: product.Amount,
+                        ImportDate: new Date(product.ImportDate),
+                    },
+                },
+            );
+
+            result = result.modifiedCount;
+        } else {
+            product.ImportDate = new Date(product.ImportDate);
+            result = await collection.insertOne(product);
+            result = result.insertedId;
+        }
+
+        Connect.disconnect();
+
+        return result;
     } catch (err) {
         console.log(err);
     }

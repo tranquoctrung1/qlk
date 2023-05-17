@@ -3,8 +3,10 @@ import './App.css';
 import Layout from './layout/layout';
 import DashBoardPage from './pages/dashboard';
 import ErrorPage from './pages/error';
+import ExchangeHistoryPage from './pages/exchangeHistory';
 import ExportHistoryPage from './pages/exportHistory';
 import LoginPage from './pages/login';
+import UserPage from './pages/user';
 
 function App() {
     const router = createBrowserRouter([
@@ -19,6 +21,14 @@ function App() {
                 {
                     path: '/export',
                     element: <ExportHistoryPage />,
+                },
+                {
+                    path: '/exchange',
+                    element: <ExchangeHistoryPage />,
+                },
+                {
+                    path: '/user',
+                    element: <UserPage />,
                 },
             ],
         },
